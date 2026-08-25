@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
     - name: Checkout Code
@@ -19,17 +18,19 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
+
+    - name: Generate Debug Keystore
+      run: |
+        keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
     - name: Make Gradlew Executable
       run: chmod +x gradlew
 
-    - name: Build APK
-      run: ./gradlew assembleDebug --no-daemon --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m"
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --stacktrace --no-daemon
 
-    - name: Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: CoC-AI-Attack-Coach-APK
         path: app/build/outputs/apk/debug/*.apk
-        if-no-files-found: error
