@@ -2,7 +2,7 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 jobs:
@@ -13,8 +13,8 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Set up Java 17
-      uses: actions/setup-java@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v5
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -22,25 +22,23 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
 
-    - name: Fix Corrupt Gradle Wrapper Jar
-      run: |
-        curl -sLo gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar
-
-    - name: Prepare Environment and Keystore
+    - name: Prepare Secrets & Keystore
       run: |
         touch .env
         touch .env.example
+        mkdir -p app
+        touch app/.env
         keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
-    - name: Grant execute permission for gradlew
+    - name: Make Gradlew Executable
       run: chmod +x gradlew
 
-    - name: Build APK with Gradle
+    - name: Build Debug APK
       run: ./gradlew assembleDebug --no-daemon --stacktrace
 
-    - name: Upload APK Artifact
+    - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
-        name: CoC-AI-Attack-Coach-APK
+        name: coc-ai-coach-debug-apk
         path: app/build/outputs/apk/debug/*.apk
         if-no-files-found: error
