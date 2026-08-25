@@ -30,6 +30,13 @@ jobs:
           gradle-version: "9.3.1"
           validate-wrappers: false
 
+      - name: Create required environment files
+        run: |
+          printf '%s\n' '# Build environment' > .env.example
+          cp .env.example .env
+          mkdir -p app
+          cp .env.example app/.env
+
       - name: Build Debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
 
