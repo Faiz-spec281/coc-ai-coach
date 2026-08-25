@@ -19,17 +19,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Generate Debug Keystore
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Create Keystore and Dummy Secrets
       run: |
         keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+        touch .env
 
     - name: Make Gradlew Executable
       run: chmod +x gradlew
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace --no-daemon
+    - name: Build APK
+      run: ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m"
 
-    - name: Upload APK Artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: CoC-AI-Attack-Coach-APK
