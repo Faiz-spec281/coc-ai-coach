@@ -22,6 +22,10 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
 
+    - name: Prepare Official Gradle Wrapper Jar
+      run: |
+        curl -sLo gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar
+
     - name: Prepare Secrets & Keystore
       run: |
         touch .env
