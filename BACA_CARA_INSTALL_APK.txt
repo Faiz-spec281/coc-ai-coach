@@ -1,0 +1,10 @@
+CARA MENGHASILKAN FILE APK (.apk):
+
+1. Buka folder ini di Command Prompt (CMD).
+2. Jalankan perintah:
+   gradlew.bat assembleDebug
+
+3. File APK Anda akan otomatis dibuat di folder:
+   app\build\outputs\apk\debug\app-debug.apk
+
+4. Kirim file app-debug.apk ke HP Android via WhatsApp Web / Google Drive lalu install di HP.

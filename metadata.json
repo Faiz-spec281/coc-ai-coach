@@ -1,0 +1,6 @@
+{
+  "name": "CoC AI Attack Coach",
+  "description": "AI Attack Coach for Clash of Clans featuring TH-specific 3-star strategies, visual base overlay, army generator, spell & hero timing, attack simulation, and video analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
